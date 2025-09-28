@@ -1,4 +1,5 @@
 import Hapi from "@hapi/hapi";
+import hlogr from "hlogr";
 
 const server = Hapi.server({
   port: 3000,
@@ -6,11 +7,9 @@ const server = Hapi.server({
 });
 
 server.route({
-  method: "GET",
   path: "/",
-  handler: () => {
-    return "Hello World!";
-  }
+  method: "GET",
+  handler: () => "Hello World!",
 });
 
 export const init = async () => {
@@ -20,6 +19,7 @@ export const init = async () => {
 
 export const start = async () => {
   await server.start();
+  await server.register(hlogr);
   console.log(`Server running at: ${server.info.uri}`);
   return server;
 };

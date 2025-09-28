@@ -11,4 +11,5 @@ export type FormatterFn = (params: FormatParams) => string;
 export type PluginOptions = {
   enabled?: boolean;
   format?: FormatterFn;
+  writer?: (log: string) => unknown;
 }

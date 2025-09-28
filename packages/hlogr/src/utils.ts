@@ -1,6 +1,6 @@
 import { FormatterFn } from "hlogr/types";
 
-export const defaultFormatter: FormatterFn = (payload) => {
+export const defaultFormat: FormatterFn = (payload) => {
   const { time, pid, method } = payload;
-  return `${time.toISOString()} | ${pid} | ${method}`;
+  return `${time.toISOString()} | ${pid} | ${method}\n`;
 }

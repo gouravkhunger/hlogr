@@ -1,3 +1,4 @@
+import Boom from "@hapi/boom";
 import type { Server } from "@hapi/hapi";
 
 import pkg from "hlogr/package.json";
@@ -14,14 +15,31 @@ const register = async (server: Server, options?: PluginOptions) => {
   if (!enabled) return;
 
   server.events.on("response", (request) => {
-    const { method, path, info } = request;
+    const { settings, info: serverInfo } = server;
+    const { method, path, info, route, query, headers, response } = request;
+
+    const isBoom = Boom.isBoom(response);
 
     const payload = {
       path,
-      method,
+      query,
+      host: info.host,
       time: new Date(),
       pid: process.pid,
-      responseTime: info.responded - info.received
+      route: route.path,
+      port: settings.port,
+      ip: info.remoteAddress,
+      referer: info.referrer,
+      hostname: info.hostname,
+      requestHeaders: headers,
+      remotePort: info.remotePort,
+      method: method.toUpperCase(),
+      protocol: serverInfo.protocol,
+      userAgent: headers["user-agent"] || "",
+      latency: info.responded - info.received,
+      error: isBoom ? response.message : undefined,
+      status: isBoom ? response.output.statusCode : response.statusCode,
+      responseHeaders: isBoom ? response.output.headers : response.headers,
     };
 
     writer(format(payload));

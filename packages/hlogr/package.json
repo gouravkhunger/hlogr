@@ -21,7 +21,11 @@
     "lint": "eslint .",
     "check-types": "tsc --noEmit"
   },
+  "dependencies": {
+    "@hapi/boom": "^10.0.1"
+  },
   "devDependencies": {
+    "@hapi/hapi": "^21.4.3",
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
     "@types/node": "^22.15.3",

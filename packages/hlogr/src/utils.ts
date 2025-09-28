@@ -5,7 +5,7 @@ export const defaultFormat: FormatterFn = (payload) => {
   return [
     formatTime(time),
     status,
-    `${widthAlign(latency, 3, "right")}ms`,
+    `${widthAlign(latency, 4, "right")}ms`,
     ip,
     widthAlign(method, 7, "center"),
     path,

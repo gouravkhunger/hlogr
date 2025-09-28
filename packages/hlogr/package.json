@@ -1,7 +1,8 @@
 {
   "name": "hlogr",
   "version": "0.0.1",
-  "description": "Opinionated logger for hapi.js",
+  "description": "Opinionated drop-in request logger for Hapi.js",
+  "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -9,7 +10,7 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.mjs"
+      "require": "./dist/index.cjs"
     }
   },
   "files": [

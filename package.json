@@ -1,5 +1,5 @@
 {
-  "name": "htrace",
+  "name": "repo",
   "private": true,
   "scripts": {
     "build": "turbo run build",

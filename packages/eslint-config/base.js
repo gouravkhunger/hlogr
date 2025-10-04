@@ -18,6 +18,7 @@ export const config = [
       turbo: turboPlugin,
     },
     rules: {
+      "semi": ["error", "always"],
       "turbo/no-undeclared-env-vars": "warn",
       "object-curly-spacing": ["error", "always"],
       quotes: ["error", "double", { avoidEscape: true }]

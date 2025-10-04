@@ -48,7 +48,7 @@ const register = async (server: Server, options?: PluginOptions) => {
 
     writer(format(payload));
   });
-}
+};
 
 export default {
   pkg,

@@ -4,8 +4,8 @@
     "rootDir": ".",
     "outDir": "dist",
     "module": "ESNext",
-    "moduleResolution": "bundler",
     "types": ["vitest/globals"],
+    "moduleResolution": "bundler",
     "paths": {
       "hlogr/*": ["./src/*"],
       "hlogr/config/*": ["./config/*"],

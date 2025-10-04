@@ -1,4 +1,5 @@
-import { type Boom } from "@hapi/boom";
+import type { Boom } from "@hapi/boom";
+import type { Request } from "@hapi/hapi";
 
 declare module "@hapi/hapi" {
     interface Request {
@@ -10,6 +11,7 @@ export type PluginOptions = {
   enabled?: boolean;
   format?: FormatterFn;
   writer?: (log: string) => unknown;
+  getIp?: (request: Request) => string | undefined;
 }
 
 export type FormatterFn = (params: FormatParams) => string;

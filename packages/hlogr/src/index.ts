@@ -7,6 +7,7 @@ import { defaultFormat } from "hlogr/utils";
 
 const register = async (server: Server, options?: PluginOptions) => {
   const {
+    getIp,
     enabled = true,
     format = defaultFormat,
     writer = process.stdout.write.bind(process.stdout),
@@ -32,7 +33,6 @@ const register = async (server: Server, options?: PluginOptions) => {
       pid: process.pid,
       route: route.path,
       port: settings.port,
-      ip: info.remoteAddress,
       referer: info.referrer,
       hostname: info.hostname,
       requestHeaders: headers,
@@ -41,6 +41,7 @@ const register = async (server: Server, options?: PluginOptions) => {
       protocol: serverInfo.protocol,
       userAgent: headers["user-agent"] || "",
       latency: info.responded - info.received,
+      ip: getIp?.(request) || info.remoteAddress,
       error: hlogrError ? hlogrError.message : undefined,
       status: hlogrError ? hlogrError.output.statusCode : (response as ResponseObject).statusCode,
       responseHeaders: hlogrError ? hlogrError.output.headers : (response as ResponseObject).headers,

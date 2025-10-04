@@ -1,3 +1,11 @@
+import { type Boom } from "@hapi/boom";
+
+declare module "@hapi/hapi" {
+    interface Request {
+        hlogrError?: Boom
+    }
+}
+
 export type PluginOptions = {
   enabled?: boolean;
   format?: FormatterFn;

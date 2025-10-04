@@ -1,5 +1,5 @@
 import Hapi from "@hapi/hapi";
-import { routes } from "hlogr/config/routes";
+import { routes } from "@repo/config";
 
 const server = Hapi.server({
   port: 3000,

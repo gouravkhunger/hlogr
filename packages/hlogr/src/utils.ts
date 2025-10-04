@@ -11,7 +11,7 @@ export const defaultFormat: FormatterFn = (payload) => {
     path,
     error || "-"
   ].join(" | ") + "\n";
-}
+};
 
 const widthAlign = (value: number | string, length: number, align: "right" | "center"): string => {
   const str = value.toString();

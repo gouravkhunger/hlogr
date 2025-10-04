@@ -8,6 +8,7 @@
     "dev": "tsc -b && node dist/index.js"
   },
   "devDependencies": {
+    "@repo/config": "*",
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
     "@types/hapi__hapi": "^20.0.13",

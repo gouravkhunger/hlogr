@@ -1,7 +1,8 @@
 {
-  "name": "hlogr",
-  "version": "0.0.1",
-  "description": "Opinionated drop-in request logger for Hapi.js",
+  "name": "@repo/config",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -13,36 +14,20 @@
       "require": "./dist/index.cjs"
     }
   },
-  "files": [
-    "dist",
-    "README.md"
-  ],
   "scripts": {
-    "test": "vitest run",
     "build": "tsdown",
     "lint": "eslint .",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@hapi/boom": "^10.0.1"
+    "@hapi/boom": "^10.0.1",
+    "@hapi/hapi": "^21.4.3"
   },
   "devDependencies": {
-    "@hapi/hapi": "^21.4.3",
-    "@repo/config": "*",
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
-    "@types/node": "^22.15.3",
     "eslint": "^9.34.0",
     "tsdown": "^0.15.5",
-    "typescript": "5.9.2",
-    "vitest": "^3.2.4"
-  },
-  "keywords": [
-    "hapi",
-    "hapi.js",
-    "hapijs",
-    "logging",
-    "tracing",
-    "plugin"
-  ]
+    "typescript": "5.9.2"
+  }
 }

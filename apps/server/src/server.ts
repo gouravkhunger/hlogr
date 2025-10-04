@@ -1,4 +1,6 @@
 import Hapi from "@hapi/hapi";
+import { routes } from "@repo/config";
+
 import hlogr from "hlogr";
 
 const server = Hapi.server({
@@ -6,11 +8,7 @@ const server = Hapi.server({
   host: "0.0.0.0",
 });
 
-server.route({
-  path: "/",
-  method: "GET",
-  handler: () => "Hello World!",
-});
+server.route(routes);
 
 export const init = async () => {
   await server.initialize();

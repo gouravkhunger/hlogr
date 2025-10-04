@@ -7,8 +7,8 @@
     "types": ["vitest/globals"],
     "moduleResolution": "bundler",
     "paths": {
-      "hlogr/*": ["./src/*"],
-      "hlogr/package.json": ["./package.json"]
+      "@repo/config/*": ["./src/*"],
+      "@repo/config/package.json": ["./package.json"]
     }
   },
   "include": ["src", "test"],

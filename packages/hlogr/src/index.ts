@@ -1,5 +1,5 @@
 import Boom from "@hapi/boom";
-import type { Server } from "@hapi/hapi";
+import type { Server, ResponseObject } from "@hapi/hapi";
 
 import pkg from "hlogr/package.json";
 import { PluginOptions } from "hlogr/types";
@@ -14,11 +14,15 @@ const register = async (server: Server, options?: PluginOptions) => {
 
   if (!enabled) return;
 
+  server.ext("onPreResponse", (request, h) => {
+    const { response } = request;
+    if (Boom.isBoom(response)) request.hlogrError = response;
+    return h.continue;
+  });
+
   server.events.on("response", (request) => {
     const { settings, info: serverInfo } = server;
-    const { method, path, info, route, query, headers, response } = request;
-
-    const isBoom = Boom.isBoom(response);
+    const { method, path, info, route, query, headers, response, hlogrError } = request;
 
     const payload = {
       path,
@@ -37,9 +41,9 @@ const register = async (server: Server, options?: PluginOptions) => {
       protocol: serverInfo.protocol,
       userAgent: headers["user-agent"] || "",
       latency: info.responded - info.received,
-      error: isBoom ? response.message : undefined,
-      status: isBoom ? response.output.statusCode : response.statusCode,
-      responseHeaders: isBoom ? response.output.headers : response.headers,
+      error: hlogrError ? hlogrError.message : undefined,
+      status: hlogrError ? hlogrError.output.statusCode : (response as ResponseObject).statusCode,
+      responseHeaders: hlogrError ? hlogrError.output.headers : (response as ResponseObject).headers,
     };
 
     writer(format(payload));

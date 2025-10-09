@@ -1,5 +1,8 @@
 # hlogr
 
+[![CI](https://github.com/gouravkhunger/hlogr/actions/workflows/ci.yml/badge.svg)](https://github.com/gouravkhunger/hlogr/actions/workflows/ci.yml)
+[![NPM version](https://img.shields.io/npm/v/hlogr.svg)](https://www.npmjs.org/package/hlogr)
+
 An opinionated drop-in request logger for Hapi.js servers. Supports custom formats and write targets.
 
 ## Install

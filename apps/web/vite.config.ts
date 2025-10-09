@@ -32,6 +32,7 @@ export default async (): Promise<UserConfig> => {
   return {
     server: {
       port: 4000,
+      host: "0.0.0.0",
     },
     build: {
       target: "esnext",

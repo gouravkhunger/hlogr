@@ -1,0 +1,16 @@
+{
+  "extends": "@repo/typescript-config/web.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "useDefineForClassFields": true,
+
+    /* Linting */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

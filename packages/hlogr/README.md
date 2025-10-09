@@ -1,5 +1,8 @@
 # hlogr
 
+[![CI](https://github.com/gouravkhunger/hlogr/actions/workflows/ci.yml/badge.svg)](https://github.com/gouravkhunger/hlogr/actions/workflows/ci.yml)
+[![NPM version](https://img.shields.io/npm/v/hlogr.svg)](https://www.npmjs.org/package/hlogr)
+
 An opinionated drop-in request logger for Hapi.js servers. Supports custom formats and write targets.
 
 ## Install
@@ -28,7 +31,7 @@ init().then(() => server.start());
 
 This will log requests in the following format by default:
 
-```
+```log
 18:53:28 | 200 |   53ms | 192.168.1.10 |   GET   | /user/123 | -
 19:15:33 | 200 |   46ms | 192.168.1.22 |   GET   | /health | -
 19:45:33 | 500 |   53ms | 10.0.0.8     |  POST   | /api/upload | Invalid request
@@ -42,7 +45,7 @@ This will log requests in the following format by default:
 
 ### Log Format
 
-You can use the building blocks from [`FormatParams`](https://github.com/gouravkhunger/hlogr/blob/main/packages/hlogr/src/types.ts#L9) to define your own log structure.
+You can use the building blocks from [`FormatParams`](https://github.com/gouravkhunger/hlogr/blob/main/packages/hlogr/src/types.ts#L19) to define your own log structure.
 
 ```ts
 await server.register({

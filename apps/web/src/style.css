@@ -1,0 +1,80 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --spacing-75ch: 75ch;
+}
+
+@layer base {
+  body {
+    @apply mx-auto flex flex-col bg-white;
+    font-family: "SF Mono", "Segoe UI Mono", "Roboto Mono", Menlo, Courier, monospace;
+  }
+
+  p {
+    @apply text-black leading-relaxed;
+  }
+
+  code {
+    @apply text-black bg-slate-200 px-1.5 py-1 rounded;
+  }
+
+  footer {
+    @apply mb-4 flex flex-col justify-center items-center;
+  }
+}
+
+.container {
+  @apply relative mx-auto p-4 mt-2 max-w-75ch;
+  @apply prose-pre:rounded-lg prose-a:has-[img]:inline-block;
+  @apply prose-code:before:content-none prose-code:after:content-none;
+
+  & a img {
+    margin: 0;
+  }
+}
+
+/* https://github.com/joshnuss/shiki-transformer-copy-button */
+pre:has(code) {
+  @apply relative flex p-0;
+}
+
+pre code {
+  @apply p-4 overflow-x-auto;
+}
+
+pre button.copy {
+  @apply absolute top-3 right-3 flex p-0 size-8 cursor-pointer;
+
+  & span {
+    @apply p-1.5 bg-origin-content w-full aspect-square bg-no-repeat bg-center bg-cover;
+  }
+
+  & .ready {
+    background-image: url(/icons/copy.svg);
+    @apply rounded-lg outline-none;
+  }
+
+  & .ready:hover {
+    @apply bg-gray-600;
+  }
+
+  & .success {
+    background-image: url(/icons/copy-success.svg);
+    @apply hidden rounded-lg outline-none;
+  }
+
+  & .success:hover {
+    @apply bg-gray-600;
+  }
+
+  &.copied {
+    & .success {
+      @apply block;
+    }
+
+    & .ready {
+      @apply hidden;
+    }
+  }
+}

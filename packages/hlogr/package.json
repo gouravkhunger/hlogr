@@ -1,7 +1,9 @@
 {
   "name": "hlogr",
+  "license": "MIT",
   "version": "0.0.2",
   "description": "Opinionated drop-in request logger for Hapi.js",
+  "author": "Gourav Khunger <gouravkhunger18@gmail.com> (https://gourav.sh)",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -12,6 +14,14 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gouravkhunger/hlogr.git",
+    "directory": "packages/hlogr"
+  },
+  "bugs": {
+    "url": "https://github.com/gouravkhunger/hlogr/issues"
   },
   "files": [
     "dist",

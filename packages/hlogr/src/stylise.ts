@@ -1,9 +1,9 @@
 import type { StyliseFn } from "hlogr/types";
 
 export const stylise: StyliseFn = (payload) => {
-  const { ip, time, status, method, latency, error } = payload;
+  const { ip, path, time, status, method, latency, error } = payload;
   return {
-    ...payload,
+    path,
     time: formatTime(time),
     status: formatStatus(status),
     method: formatMethod(method),

@@ -15,7 +15,7 @@ export type PluginOptions = {
 };
 
 export type FormatterFn = (params: FormatParams) => string;
-export type StyliseFn = (params: FormatParams) => String<FormatParams>;
+export type StyliseFn = (params: FormatParams) => Partial<String<FormatParams>>;
 
 export type FormatParams = {
   ip: string;

@@ -2,9 +2,9 @@ import type { Boom } from "@hapi/boom";
 import type { Request } from "@hapi/hapi";
 
 declare module "@hapi/hapi" {
-    interface Request {
-        hlogrError?: Boom
-    }
+  interface Request {
+    hlogrError?: Boom;
+  }
 }
 
 export type PluginOptions = {
@@ -12,9 +12,10 @@ export type PluginOptions = {
   format?: FormatterFn;
   writer?: (log: string) => unknown;
   getIp?: (request: Request) => string | undefined;
-}
+};
 
 export type FormatterFn = (params: FormatParams) => string;
+export type StyliseFn = (params: FormatParams) => String<FormatParams>;
 
 export type FormatParams = {
   ip: string;
@@ -36,4 +37,15 @@ export type FormatParams = {
   requestHeaders: Record<string, string>;
   query: Record<string, string | string[]>;
   responseHeaders?: Record<string, string | number | string[] | undefined>;
-}
+};
+
+export type String<FormatParams> = {
+  [K in keyof FormatParams]: K extends
+    | "responseHeaders"
+    | "requestHeaders"
+    | "query"
+    | "port"
+    | "pid"
+    ? FormatParams[K]
+    : string;
+};

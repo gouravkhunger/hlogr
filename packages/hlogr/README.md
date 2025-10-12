@@ -34,18 +34,18 @@ This will log requests in the following format by default:
 ```log
 18:53:28 | 200 |   53ms | 192.168.1.10 |   GET   | /user/123 | -
 19:15:33 | 200 |   46ms | 192.168.1.22 |   GET   | /health | -
-19:45:33 | 500 |   53ms | 10.0.0.8     |  POST   | /api/upload | Invalid request
+19:45:33 | 500 |   53ms | 10.0.0.8     |   POST  | /api/upload | Invalid request
 20:04:22 | 200 |  403ms | 172.17.0.1   |   GET   | /image/42 | -
 20:10:19 | 404 |   10ms | 192.168.1.15 |   GET   | /icons/dev.png | Not Found
 20:15:33 | 200 |   60ms | 10.0.0.2     |   GET   | /health | -
-20:16:49 | 200 |    2ms | 192.168.1.30 | DELETE  | /users/999 | -
+20:16:49 | 200 |    2ms | 192.168.1.30 |  DELETE | /users/999 | -
 ```
 
 ## Customizations
 
 ### Log Format
 
-You can use the building blocks from [`FormatParams`](https://github.com/gouravkhunger/hlogr/blob/main/packages/hlogr/src/types.ts#L19) to define your own log structure.
+You can use the building blocks from [`FormatParams`](https://github.com/gouravkhunger/hlogr/blob/main/packages/hlogr/src/types.ts#L20) to define your own log structure.
 
 ```ts
 await server.register({
@@ -57,7 +57,7 @@ await server.register({
 });
 ```
 
-This is useful when creating formatters for each of the parameter. See [`defaultFormat`](https://github.com/gouravkhunger/hlogr/blob/main/packages/hlogr/src/utils.ts#L3) for an example.
+This is useful when creating formatters for each of the parameter. See [`defaultFormat`](https://github.com/gouravkhunger/hlogr/blob/main/packages/hlogr/src/utils.ts#L4) for an example.
 
 ### Custom Write Target
 

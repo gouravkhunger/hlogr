@@ -13,6 +13,19 @@ export const stylise: StyliseFn = (payload) => {
   };
 };
 
+export const styliseNoColor: StyliseFn = (payload) => {
+  const { ip, path, time, status, method, latency, error } = payload;
+  return {
+    path,
+    time: formatTime(time),
+    status: formatStatus(status),
+    method: formatMethod(method),
+    latency: formatLatency(latency),
+    error: error || "-",
+    ip: widthAlign(ip, { width: 15, align: "left" }),
+  };
+};
+
 const widthAlign = (
   value: number | string,
   { width, align }: { width: number; align: "left" | "right" | "center" }

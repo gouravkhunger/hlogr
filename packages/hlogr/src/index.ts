@@ -8,8 +8,9 @@ import { defaultFormat } from "hlogr/utils";
 const register = async (server: Server, options?: PluginOptions) => {
   const {
     getIp,
+    colors = true,
     enabled = true,
-    format = defaultFormat,
+    format = defaultFormat(colors),
     writer = process.stdout.write.bind(process.stdout),
   } = options || {};
 

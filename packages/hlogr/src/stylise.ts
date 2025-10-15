@@ -4,12 +4,25 @@ export const stylise: StyliseFn = (payload) => {
   const { ip, path, time, status, method, latency, error } = payload;
   return {
     path,
+    error: error || "-",
     time: formatTime(time),
-    status: formatStatus(status),
+    status: status.toString(),
     method: formatMethod(method),
     latency: formatLatency(latency),
+    ip: widthAlign(ip, { width: 15, align: "left" }),
+  };
+};
+
+export const styliseWithColors: StyliseFn = (payload) => {
+  const { ip, path, time, status, method, latency, error } = payload;
+  return {
+    path,
+    time: formatTime(time),
+    status: colorStatus(status),
     error: error ? color.red(error) : "-",
     ip: widthAlign(ip, { width: 15, align: "left" }),
+    method: colorMethod(method, formatMethod(method)),
+    latency: colorLatency(latency, formatLatency(latency)),
   };
 };
 
@@ -28,27 +41,29 @@ const widthAlign = (
 const formatTime = (date: Date) =>
   date.toISOString().split("T")[1]?.replace("Z", "").split(".")[0] || "-";
 
-const formatStatus = (status: number): string => {
-  if (status >= 500) return color.red(status.toString());
-  if (status >= 400) return color.yellow(status.toString());
-  if (status >= 300) return color.blue(status.toString());
-  if (status >= 200) return color.green(status.toString());
-  return status.toString();
+const colorStatus = (status: number): string => {
+  const _status = status.toString();
+  if (status >= 500) return color.red(_status);
+  if (status >= 400) return color.yellow(_status);
+  if (status >= 300) return color.blue(_status);
+  if (status >= 200) return color.green(_status);
+  return _status;
 };
 
-const formatMethod = (method: string): string => {
-  const aligned = widthAlign(method, { width: 7, align: "center" });
-  return (methodColor[method] ?? ((m: string) => m))(aligned);
-};
+const formatMethod = (method: string): string =>
+  widthAlign(method, { width: 7, align: "center" });
 
-const formatLatency = (latency: number): string => {
-  let colored;
-  const aligned = widthAlign(latency, { width: 4, align: "right" });
-  if (latency > 1000) colored = color.red(aligned);
-  else if (latency > 500) colored = color.yellow(aligned);
-  else if (latency > 200) colored = color.orange(aligned);
-  else colored = color.green(aligned);
-  return colored + "ms";
+const colorMethod = (method: string, formattedMethod: string): string =>
+  (methodColor[method] ?? ((m: string) => m))(formattedMethod);
+
+const formatLatency = (latency: number): string =>
+  widthAlign(latency, { width: 4, align: "right" }) + "ms";
+
+const colorLatency = (latency: number, formattedLatency: string): string => {
+  if (latency > 1000) return color.red(formattedLatency);
+  else if (latency > 500) return color.yellow(formattedLatency);
+  else if (latency > 200) return color.orange(formattedLatency);
+  else return color.green(formattedLatency);
 };
 
 const color = {

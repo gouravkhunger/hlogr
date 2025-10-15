@@ -8,6 +8,7 @@ declare module "@hapi/hapi" {
 }
 
 export type PluginOptions = {
+  colors?: boolean;
   enabled?: boolean;
   format?: FormatterFn;
   writer?: (log: string) => unknown;

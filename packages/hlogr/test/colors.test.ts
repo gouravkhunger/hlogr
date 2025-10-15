@@ -23,7 +23,7 @@ describe("hlogr", () => {
   });
 
   it("formats with colors", async () => {
-    let res = await server.inject({
+    const res = await server.inject({
         url: "/",
         method: "GET"
     });

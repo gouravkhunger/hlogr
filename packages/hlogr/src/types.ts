@@ -8,9 +8,9 @@ declare module "@hapi/hapi" {
 }
 
 export type PluginOptions = {
+  colors?: boolean;
   enabled?: boolean;
   format?: FormatterFn;
-  colors?: boolean;
   writer?: (log: string) => unknown;
   getIp?: (request: Request) => string | undefined;
 };

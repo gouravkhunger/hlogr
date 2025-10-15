@@ -45,7 +45,7 @@ This will log requests in the following format by default:
 
 ### Log Format
 
-You can use the building blocks from [`FormatParams`](https://github.com/gouravkhunger/hlogr/blob/main/packages/hlogr/src/types.ts#L20) to define your own log structure.
+You can use the building blocks from [`FormatParams`](https://github.com/gouravkhunger/hlogr/blob/main/packages/hlogr/src/types.ts#L21) to define your own log structure.
 
 ```ts
 await server.register({

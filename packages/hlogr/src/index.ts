@@ -3,20 +3,18 @@ import type { Server, ResponseObject } from "@hapi/hapi";
 
 import pkg from "hlogr/package.json";
 import { PluginOptions } from "hlogr/types";
-import { defaultFormat, noColorFormat } from "hlogr/utils";
+import { defaultFormat } from "hlogr/utils";
 
 const register = async (server: Server, options?: PluginOptions) => {
   const {
     getIp,
-    enabled = true,
-    format: formatOption,
     colors = true,
+    enabled = true,
+    format = defaultFormat(colors),
     writer = process.stdout.write.bind(process.stdout),
   } = options || {};
 
   if (!enabled) return;
-
-  const format = formatOption ?? (colors ? defaultFormat : noColorFormat);
 
   server.ext("onPreResponse", (request, h) => {
     const { response } = request;

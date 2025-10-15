@@ -4,25 +4,25 @@ export const stylise: StyliseFn = (payload) => {
   const { ip, path, time, status, method, latency, error } = payload;
   return {
     path,
+    error: error || "-",
     time: formatTime(time),
-    status: colorStatus(status, formatStatus(status)),
-    method: colorMethod(method, formatMethod(method)),
-    latency: colorLatency(latency, formatLatency(latency)),
-    error: error ? color.red(error) : "-",
+    status: status.toString(),
+    method: formatMethod(method),
+    latency: formatLatency(latency),
     ip: widthAlign(ip, { width: 15, align: "left" }),
   };
 };
 
-export const styliseNoColor: StyliseFn = (payload) => {
+export const styliseWithColors: StyliseFn = (payload) => {
   const { ip, path, time, status, method, latency, error } = payload;
   return {
     path,
     time: formatTime(time),
-    status: formatStatus(status),
-    method: formatMethod(method),
-    latency: formatLatency(latency),
-    error: error || "-",
+    status: colorStatus(status),
+    error: error ? color.red(error) : "-",
     ip: widthAlign(ip, { width: 15, align: "left" }),
+    method: colorMethod(method, formatMethod(method)),
+    latency: colorLatency(latency, formatLatency(latency)),
   };
 };
 
@@ -41,39 +41,29 @@ const widthAlign = (
 const formatTime = (date: Date) =>
   date.toISOString().split("T")[1]?.replace("Z", "").split(".")[0] || "-";
 
-const formatStatus = (status: number): string => {
-  return status.toString();
+const colorStatus = (status: number): string => {
+  const _status = status.toString();
+  if (status >= 500) return color.red(_status);
+  if (status >= 400) return color.yellow(_status);
+  if (status >= 300) return color.blue(_status);
+  if (status >= 200) return color.green(_status);
+  return _status;
 };
 
-const colorStatus = (status: number, formattedStatus: string): string => {
-  if (status >= 500) return color.red(formattedStatus);
-  if (status >= 400) return color.yellow(formattedStatus);
-  if (status >= 300) return color.blue(formattedStatus);
-  if (status >= 200) return color.green(formattedStatus);
-  return formattedStatus;
-};
+const formatMethod = (method: string): string =>
+  widthAlign(method, { width: 7, align: "center" });
 
-const formatMethod = (method: string): string => {
-  return widthAlign(method, { width: 7, align: "center" });
-};
+const colorMethod = (method: string, formattedMethod: string): string =>
+  (methodColor[method] ?? ((m: string) => m))(formattedMethod);
 
-const colorMethod = (method: string, formattedMethod: string): string => {
-  return (methodColor[method] ?? ((m: string) => m))(formattedMethod);
-};
-
-const formatLatency = (latency: number): string => {
-  const aligned = widthAlign(latency, { width: 4, align: "right" });
-  return aligned + "ms";
-};
+const formatLatency = (latency: number): string =>
+  widthAlign(latency, { width: 4, align: "right" }) + "ms";
 
 const colorLatency = (latency: number, formattedLatency: string): string => {
-  let colored;
-  const formattedLatencyWithoutMs = formattedLatency.slice(0, -2);
-  if (latency > 1000) colored = color.red(formattedLatencyWithoutMs);
-  else if (latency > 500) colored = color.yellow(formattedLatencyWithoutMs);
-  else if (latency > 200) colored = color.orange(formattedLatencyWithoutMs);
-  else colored = color.green(formattedLatencyWithoutMs);
-  return colored + formattedLatency.slice(-2);
+  if (latency > 1000) return color.red(formattedLatency);
+  else if (latency > 500) return color.yellow(formattedLatency);
+  else if (latency > 200) return color.orange(formattedLatency);
+  else return color.green(formattedLatency);
 };
 
 const color = {

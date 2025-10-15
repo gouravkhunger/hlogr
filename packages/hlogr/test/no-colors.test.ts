@@ -13,8 +13,8 @@ describe("hlogr", () => {
     await server.register({
       plugin: hlogr,
       options: {
-        writer: (log) => logs.push(log),
         colors: false,
+        writer: (log) => logs.push(log),
       },
     });
   });
@@ -24,7 +24,7 @@ describe("hlogr", () => {
   });
 
   it("formats without colors", async () => {
-    let res = await server.inject({
+    const res = await server.inject({
       url: "/",
       method: "GET"
     });

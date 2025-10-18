@@ -18,8 +18,11 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true,
       "dependsOn": ["^build"]
+    },
+    "web#dev": {
+      "cache": false,
+      "persistent": true
     }
   }
 }

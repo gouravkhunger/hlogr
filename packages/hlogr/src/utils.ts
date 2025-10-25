@@ -1,10 +1,14 @@
-import { stylise, styliseWithColors } from "hlogr/stylise";
-import type { FormatterFn } from "hlogr/types";
+import type { Payload } from "@hapi/boom";
+import type { ResponseObject } from "@hapi/hapi";
 
-export const defaultFormat = (colors: boolean): FormatterFn => {
-  const style = colors ? styliseWithColors : stylise;
-  return (payload) => {
-    const { ip, time, path, status, method, latency, error } = style(payload);
-    return [time, status, latency, ip, method, path, error].join(" | ") + "\n";
-  };
+export const getBytesSent = (response: ResponseObject["source"] | Payload): number => {
+  if (typeof response === "string") {
+    return Buffer.byteLength(response);
+  } else if (Buffer.isBuffer(response)) {
+    return response.length;
+  } else if (typeof response === "object") {
+    const json = JSON.stringify(response);
+    return Buffer.byteLength(json);
+  }
+  return 0;
 };

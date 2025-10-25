@@ -45,7 +45,22 @@ This will log requests in the following format by default:
 
 ### Log Format
 
-You can use the building blocks from [`FormatParams`](https://github.com/gouravkhunger/hlogr/blob/main/packages/hlogr/src/types.ts#L21) to define your own log structure.
+The plugin ships a few built-in log formats.
+
+```ts
+import hlogr, { LogFormats } from "hlogr";
+
+await server.register({
+  plugin: hlogr,
+  options: {
+    format: LogFormats.JSON, // default: LogFormats.DEFAULT
+  },
+});
+```
+
+Available options: `DEFAULT`, `COMMON`, `COMBINED`, `JSON` and `ECS`.
+
+You can also use the building blocks from [`FormatParams`](https://github.com/gouravkhunger/hlogr/blob/main/packages/hlogr/src/types.ts#L21) to define your own log structure.
 
 ```ts
 await server.register({
@@ -57,7 +72,7 @@ await server.register({
 });
 ```
 
-This is useful when creating formatters for each of the parameter. See [`defaultFormat`](https://github.com/gouravkhunger/hlogr/blob/main/packages/hlogr/src/utils.ts#L4) for an example.
+This is useful when creating formatters for each of the parameter. See format [`DEFAULT`](https://github.com/gouravkhunger/hlogr/blob/main/packages/hlogr/src/formats.ts#L4) for an example.
 
 ### Custom Write Target
 

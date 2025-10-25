@@ -2,15 +2,17 @@ import Boom from "@hapi/boom";
 import type { Server, ResponseObject } from "@hapi/hapi";
 
 import pkg from "hlogr/package.json";
-import { PluginOptions } from "hlogr/types";
-import { defaultFormat } from "hlogr/utils";
+import { LogFormats } from "hlogr/formats";
+import { getBytesSent } from "hlogr/utils";
+import type { PluginOptions } from "hlogr/types";
+import { stylise, styliseWithColors } from "hlogr/stylise";
 
 const register = async (server: Server, options?: PluginOptions) => {
   const {
     getIp,
     colors = true,
     enabled = true,
-    format = defaultFormat(colors),
+    format = LogFormats.DEFAULT,
     writer = process.stdout.write.bind(process.stdout),
   } = options || {};
 
@@ -24,9 +26,10 @@ const register = async (server: Server, options?: PluginOptions) => {
 
   server.events.on("response", (request) => {
     const { settings, info: serverInfo } = server;
-    const { method, path, info, route, query, headers, response, hlogrError } = request;
+    const { method, path, info, route, query, headers, response, hlogrError } =
+      request;
 
-    const payload = {
+    const payload = (colors ? styliseWithColors : stylise)({
       path,
       query,
       host: info.host,
@@ -44,16 +47,24 @@ const register = async (server: Server, options?: PluginOptions) => {
       latency: info.responded - info.received,
       ip: getIp?.(request) || info.remoteAddress,
       error: hlogrError ? hlogrError.message : undefined,
-      status: hlogrError ? hlogrError.output.statusCode : (response as ResponseObject).statusCode,
-      responseHeaders: hlogrError ? hlogrError.output.headers : (response as ResponseObject).headers,
-    };
+      status: hlogrError
+        ? hlogrError.output.statusCode
+        : (response as ResponseObject).statusCode,
+      responseHeaders: hlogrError
+        ? hlogrError.output.headers
+        : (response as ResponseObject).headers,
+      bytesSent: hlogrError
+        ? getBytesSent(hlogrError.output.payload)
+        : getBytesSent((response as ResponseObject).source),
+    });
 
     writer(format(payload));
   });
 };
 
+export { LogFormats };
 export default {
   pkg,
   register,
-  once: true
+  once: true,
 };

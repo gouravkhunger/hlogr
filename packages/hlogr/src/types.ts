@@ -15,8 +15,8 @@ export type PluginOptions = {
   getIp?: (request: Request) => string | undefined;
 };
 
-export type FormatterFn = (params: FormatParams) => string;
-export type StyliseFn = (params: FormatParams) => Partial<String<FormatParams>>;
+export type FormatterFn = (params: String<FormatParams>) => string;
+export type StyliseFn = (params: FormatParams) => String<FormatParams>;
 
 export type FormatParams = {
   ip: string;
@@ -33,6 +33,7 @@ export type FormatParams = {
   protocol: string;
   hostname: string;
   userAgent: string;
+  bytesSent: number;
   remotePort: string;
   port?: string | number;
   requestHeaders: Record<string, string>;
@@ -44,6 +45,7 @@ export type String<FormatParams> = {
   [K in keyof FormatParams]: K extends
     | "responseHeaders"
     | "requestHeaders"
+    | "bytesSent"
     | "query"
     | "port"
     | "pid"

@@ -1,5 +1,5 @@
 import { Server } from "@hapi/hapi";
-import hlogr from "hlogr";
+import hlogr, { LogFormats } from "hlogr";
 
 import { init } from "./setup";
 
@@ -10,6 +10,32 @@ describe("hlogr", () => {
   beforeEach(async () => {
     logs = [];
     server = await init();
+  });
+
+  afterEach(async () => {
+    await server.stop();
+  });
+
+  it("uses an in-built log formatter", async () => {
+    await server.register({
+      plugin: hlogr,
+      options: {
+        format: LogFormats.COMMON,
+        writer: (log) => logs.push(log),
+      }
+    });
+
+    const res = await server.inject({
+      url: "/",
+      method: "GET"
+    });
+
+    expect(res.statusCode).toEqual(200);
+    expect(logs.length).toBe(1);
+    expect(logs[0]).toContain(" - - ");
+  });
+
+  it("has a custom log formatter", async () => {
     await server.register({
       plugin: hlogr,
       options: {
@@ -17,13 +43,7 @@ describe("hlogr", () => {
         format: ({ port, path, userAgent }) => `${port} | ${path} | ${userAgent}\n`
       }
     });
-  });
 
-  afterEach(async () => {
-    await server.stop();
-  });
-
-  it("has a custom log formatter", async () => {
     const port = server.info.port;
     let res = await server.inject({
       url: "/",

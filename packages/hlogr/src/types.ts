@@ -15,8 +15,9 @@ export type PluginOptions = {
   getIp?: (request: Request) => string | undefined;
 };
 
-export type FormatterFn = (params: FormatParams) => string;
-export type StyliseFn = (params: FormatParams) => Partial<String<FormatParams>>;
+export type FormatterFn = (params: String<FormatParams>) => string;
+export type StyliseFn = (params: FormatParams) => String<FormatParams>;
+export type FormatTypes = "DEFAULT" | "COMMON" | "COMBINED" | "JSON" | "ECS";
 
 export type FormatParams = {
   ip: string;

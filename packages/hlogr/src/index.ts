@@ -3,14 +3,15 @@ import type { Server, ResponseObject } from "@hapi/hapi";
 
 import pkg from "hlogr/package.json";
 import { PluginOptions } from "hlogr/types";
-import { defaultFormat } from "hlogr/utils";
+import { Formats } from "hlogr/utils";
+import { stylise, styliseWithColors } from "hlogr/stylise";
 
 const register = async (server: Server, options?: PluginOptions) => {
   const {
     getIp,
     colors = true,
     enabled = true,
-    format = defaultFormat(colors),
+    format = Formats.DEFAULT,
     writer = process.stdout.write.bind(process.stdout),
   } = options || {};
 
@@ -26,7 +27,7 @@ const register = async (server: Server, options?: PluginOptions) => {
     const { settings, info: serverInfo } = server;
     const { method, path, info, route, query, headers, response, hlogrError } = request;
 
-    const payload = {
+    const payload = (colors ? styliseWithColors : stylise)({
       path,
       query,
       host: info.host,
@@ -46,12 +47,13 @@ const register = async (server: Server, options?: PluginOptions) => {
       error: hlogrError ? hlogrError.message : undefined,
       status: hlogrError ? hlogrError.output.statusCode : (response as ResponseObject).statusCode,
       responseHeaders: hlogrError ? hlogrError.output.headers : (response as ResponseObject).headers,
-    };
+    });
 
     writer(format(payload));
   });
 };
 
+export { Formats };
 export default {
   pkg,
   register,

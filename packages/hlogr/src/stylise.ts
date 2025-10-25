@@ -3,6 +3,7 @@ import type { StyliseFn } from "hlogr/types";
 export const stylise: StyliseFn = (payload) => {
   const { ip, path, time, status, method, latency, error } = payload;
   return {
+    ...payload,
     path,
     error: error || "-",
     time: formatTime(time),
@@ -16,6 +17,7 @@ export const stylise: StyliseFn = (payload) => {
 export const styliseWithColors: StyliseFn = (payload) => {
   const { ip, path, time, status, method, latency, error } = payload;
   return {
+    ...payload,
     path,
     time: formatTime(time),
     status: colorStatus(status),

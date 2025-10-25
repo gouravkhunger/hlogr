@@ -16,7 +16,7 @@ describe("hlogr", () => {
     await server.stop();
   });
 
-  it("uses default log formatter", async () => {
+  it("uses an in-built log formatter", async () => {
     await server.register({
       plugin: hlogr,
       options: {
@@ -25,7 +25,7 @@ describe("hlogr", () => {
       }
     });
 
-    let res = await server.inject({
+    const res = await server.inject({
       url: "/",
       method: "GET"
     });

@@ -33,6 +33,7 @@ export type FormatParams = {
   protocol: string;
   hostname: string;
   userAgent: string;
+  bytesSent: number;
   remotePort: string;
   port?: string | number;
   requestHeaders: Record<string, string>;

@@ -57,7 +57,7 @@ await server.register({
 });
 ```
 
-This is useful when creating formatters for each of the parameter. See format [`DEFAULT`](https://github.com/gouravkhunger/hlogr/blob/main/packages/hlogr/src/utils.ts#L4) for an example.
+This is useful when creating formatters for each of the parameter. See format [`DEFAULT`](https://github.com/gouravkhunger/hlogr/blob/main/packages/hlogr/src/formats.ts#L4) for an example.
 
 ### Custom Write Target
 

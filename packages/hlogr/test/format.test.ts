@@ -1,5 +1,5 @@
 import { Server } from "@hapi/hapi";
-import hlogr, { Formats } from "hlogr";
+import hlogr, { LogFormats } from "hlogr";
 
 import { init } from "./setup";
 
@@ -20,7 +20,7 @@ describe("hlogr", () => {
     await server.register({
       plugin: hlogr,
       options: {
-        format: Formats.COMMON,
+        format: LogFormats.COMMON,
         writer: (log) => logs.push(log),
       }
     });

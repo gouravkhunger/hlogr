@@ -3,7 +3,7 @@ import type { Server, ResponseObject } from "@hapi/hapi";
 
 import pkg from "hlogr/package.json";
 import { PluginOptions } from "hlogr/types";
-import { Formats } from "hlogr/utils";
+import { LogFormats } from "hlogr/formats";
 import { stylise, styliseWithColors } from "hlogr/stylise";
 
 const register = async (server: Server, options?: PluginOptions) => {
@@ -11,7 +11,7 @@ const register = async (server: Server, options?: PluginOptions) => {
     getIp,
     colors = true,
     enabled = true,
-    format = Formats.DEFAULT,
+    format = LogFormats.DEFAULT,
     writer = process.stdout.write.bind(process.stdout),
   } = options || {};
 
@@ -53,7 +53,7 @@ const register = async (server: Server, options?: PluginOptions) => {
   });
 };
 
-export { Formats };
+export { LogFormats };
 export default {
   pkg,
   register,

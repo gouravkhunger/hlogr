@@ -45,6 +45,7 @@ export type String<FormatParams> = {
   [K in keyof FormatParams]: K extends
     | "responseHeaders"
     | "requestHeaders"
+    | "bytesSent"
     | "query"
     | "port"
     | "pid"

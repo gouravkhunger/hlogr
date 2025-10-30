@@ -5,7 +5,6 @@ import pkg from "hlogr/package.json";
 import { LogFormats } from "hlogr/formats";
 import { getBytesSent } from "hlogr/utils";
 import type { PluginOptions } from "hlogr/types";
-import { stylise, styliseWithColors } from "hlogr/stylise";
 
 const register = async (server: Server, options?: PluginOptions) => {
   const {
@@ -29,9 +28,10 @@ const register = async (server: Server, options?: PluginOptions) => {
     const { method, path, info, route, query, headers, response, hlogrError } =
       request;
 
-    const payload = (colors ? styliseWithColors : stylise)({
+    const payload = {
       path,
       query,
+      colors,
       host: info.host,
       time: new Date(),
       pid: process.pid,
@@ -56,7 +56,7 @@ const register = async (server: Server, options?: PluginOptions) => {
       bytesSent: hlogrError
         ? getBytesSent(hlogrError.output.payload)
         : getBytesSent((response as ResponseObject).source),
-    });
+    };
 
     writer(format(payload));
   });

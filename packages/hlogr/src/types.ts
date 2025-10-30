@@ -1,5 +1,5 @@
-import type { Boom } from "@hapi/boom";
-import type { Request } from "@hapi/hapi";
+import type { Boom, Payload } from "@hapi/boom";
+import type { Request, ResponseObject } from "@hapi/hapi";
 
 declare module "@hapi/hapi" {
   interface Request {
@@ -15,9 +15,6 @@ export type PluginOptions = {
   getIp?: (request: Request) => string | undefined;
 };
 
-export type FormatterFn = (params: String<FormatParams>) => string;
-export type StyliseFn = (params: FormatParams) => String<FormatParams>;
-
 export type FormatParams = {
   ip: string;
   time: Date;
@@ -32,6 +29,7 @@ export type FormatParams = {
   referer: string;
   protocol: string;
   hostname: string;
+  colors?: boolean;
   userAgent: string;
   bytesSent: number;
   remotePort: string;
@@ -52,3 +50,21 @@ export type String<FormatParams> = {
     ? FormatParams[K]
     : string;
 };
+
+export type Response = ResponseObject["source"] | Payload;
+export type FormatterFn = (params: FormatParams) => string;
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export type TransformFn = (
+  payload: FormatParams,
+  transforms: Partial<{
+    [K in keyof FormatParams]: [
+      FormatParams[K],
+      ...{
+        args?: any[];
+        disabled?: boolean;
+        fn: (...args: any[]) => string;
+      }[],
+    ];
+  }>
+) => String<FormatParams>;

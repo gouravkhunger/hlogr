@@ -17,7 +17,12 @@ export const init = async () => {
 
 export const start = async () => {
   await server.start();
-  await server.register(hlogr);
+  await server.register({
+    plugin: hlogr,
+    options: {
+      colors: true,
+    }
+  });
   console.log(`Server running at: ${server.info.uri}`);
   return server;
 };

@@ -1,31 +1,24 @@
-import type { StyliseFn } from "hlogr/types";
+import type { FormatParams } from "hlogr/types";
+import { noop, transform } from "hlogr/utils";
 
-export const stylise: StyliseFn = (payload) => {
-  const { ip, path, time, status, method, latency, error } = payload;
-  return {
-    ...payload,
-    path,
-    error: error || "-",
-    time: formatTime(time),
-    status: status.toString(),
-    method: formatMethod(method),
-    latency: formatLatency(latency),
-    ip: widthAlign(ip, { width: 15, align: "left" }),
-  };
-};
-
-export const styliseWithColors: StyliseFn = (payload) => {
-  const { ip, path, time, status, method, latency, error } = payload;
-  return {
-    ...payload,
-    path,
-    time: formatTime(time),
-    status: colorStatus(status),
-    error: error ? color.red(error) : "-",
-    ip: widthAlign(ip, { width: 15, align: "left" }),
-    method: colorMethod(method, formatMethod(method)),
-    latency: colorLatency(latency, formatLatency(latency)),
-  };
+export const stylise = (payload: FormatParams, tabs = false) => {
+  const { ip, colors, time, status, method, latency, error } = payload;
+  return transform(payload, {
+    time: [time, { fn: formatTime }],
+    status: [status, { fn: colorStatus, disabled: !colors }],
+    error: [error || "-", { fn: color.red, disabled: !colors || !error }],
+    ip: [ip, { fn: widthAlign, disabled: !tabs, args: [{ width: 15, align: "left" }] }],
+    latency: [
+      latency,
+      { fn: formatLatency, disabled: !tabs },
+      { fn: colorLatency, disabled: !colors },
+    ],
+    method: [
+      method.toUpperCase(),
+      { fn: formatMethod, disabled: !tabs },
+      { fn: colorMethod, disabled: !colors },
+    ],
+  });
 };
 
 const widthAlign = (
@@ -40,10 +33,16 @@ const widthAlign = (
   return " ".repeat(start) + str + " ".repeat(end);
 };
 
+const formatMethod = (method: string): string =>
+  widthAlign(method, { width: 7, align: "center" });
+
+const formatLatency = (latency: string): string =>
+  widthAlign(latency, { width: 4, align: "right" }) + "ms";
+
 const formatTime = (date: Date) =>
   date.toISOString().split("T")[1]?.replace("Z", "").split(".")[0] || "-";
 
-const colorStatus = (status: number): string => {
+export const colorStatus = (status: number): string => {
   const _status = status.toString();
   if (status >= 500) return color.red(_status);
   if (status >= 400) return color.yellow(_status);
@@ -52,28 +51,22 @@ const colorStatus = (status: number): string => {
   return _status;
 };
 
-const formatMethod = (method: string): string =>
-  widthAlign(method, { width: 7, align: "center" });
+const colorMethod = (method: string): string =>
+  (methodColor[method.trim()] ?? noop)(method);
 
-const colorMethod = (method: string, formattedMethod: string): string =>
-  (methodColor[method] ?? ((m: string) => m))(formattedMethod);
-
-const formatLatency = (latency: number): string =>
-  widthAlign(latency, { width: 4, align: "right" }) + "ms";
-
-const colorLatency = (latency: number, formattedLatency: string): string => {
-  if (latency > 1000) return color.red(formattedLatency);
-  else if (latency > 500) return color.yellow(formattedLatency);
-  else if (latency > 200) return color.orange(formattedLatency);
-  else return color.green(formattedLatency);
+const colorLatency = (latency: number): string => {
+  if (latency > 1000) return color.red(latency);
+  else if (latency > 500) return color.yellow(latency);
+  else if (latency > 200) return color.orange(latency);
+  else return color.green(latency);
 };
 
 const color = {
-  red: (text: string) => `\x1b[91m${text}\x1b[0m`,
-  green: (text: string) => `\x1b[92m${text}\x1b[0m`,
-  yellow: (text: string) => `\x1b[93m${text}\x1b[0m`,
-  blue: (text: string) => `\x1b[38;5;111m${text}\x1b[0m`,
-  orange: (text: string) => `\x1b[38;5;214m${text}\x1b[0m`,
+  red: (text: string | number) => `\x1b[91m${text}\x1b[0m`,
+  green: (text: string | number) => `\x1b[92m${text}\x1b[0m`,
+  yellow: (text: string | number) => `\x1b[93m${text}\x1b[0m`,
+  blue: (text: string | number) => `\x1b[38;5;111m${text}\x1b[0m`,
+  orange: (text: string | number) => `\x1b[38;5;214m${text}\x1b[0m`,
 };
 
 const methodColor: Record<string, typeof color.red> = {

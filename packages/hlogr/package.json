@@ -1,7 +1,7 @@
 {
   "name": "hlogr",
   "license": "MIT",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "homepage": "https://hlogr.gourav.sh",
   "description": "Opinionated drop-in request logger for Hapi.js",
   "author": "Gourav Khunger <gouravkhunger18@gmail.com> (https://gourav.sh)",

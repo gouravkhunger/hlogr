@@ -1,5 +1,5 @@
 import type { FormatParams } from "hlogr/types";
-import { noop, transform } from "hlogr/utils";
+import { noop, transform, widthAlign } from "hlogr/utils";
 
 export const stylise = (payload: FormatParams, tabs = false) => {
   const { ip, colors, time, status, method, latency, error } = payload;
@@ -21,18 +21,6 @@ export const stylise = (payload: FormatParams, tabs = false) => {
   });
 };
 
-const widthAlign = (
-  value: number | string,
-  { width, align }: { width: number; align: "left" | "right" | "center" }
-): string => {
-  const str = value.toString();
-  const maxW = Math.max(width - str.length, 0);
-  const end = Math.floor(maxW / 2), start = maxW - end;
-  if (align === "right") return " ".repeat(maxW) + str;
-  if (align === "left") return str + " ".repeat(maxW);
-  return " ".repeat(start) + str + " ".repeat(end);
-};
-
 const formatMethod = (method: string): string =>
   widthAlign(method, { width: 7, align: "center" });
 
@@ -42,15 +30,6 @@ const formatLatency = (latency: string): string =>
 const formatTime = (date: Date) =>
   date.toISOString().split("T")[1]?.replace("Z", "").split(".")[0] || "-";
 
-export const colorStatus = (status: number): string => {
-  const _status = status.toString();
-  if (status >= 500) return color.red(_status);
-  if (status >= 400) return color.yellow(_status);
-  if (status >= 300) return color.blue(_status);
-  if (status >= 200) return color.green(_status);
-  return _status;
-};
-
 const colorMethod = (method: string): string =>
   (methodColor[method.trim()] ?? noop)(method);
 
@@ -59,6 +38,15 @@ const colorLatency = (latency: number): string => {
   else if (latency > 500) return color.yellow(latency);
   else if (latency > 200) return color.orange(latency);
   else return color.green(latency);
+};
+
+const colorStatus = (status: number): string => {
+  const _status = status.toString();
+  if (status >= 500) return color.red(_status);
+  if (status >= 400) return color.yellow(_status);
+  if (status >= 300) return color.blue(_status);
+  if (status >= 200) return color.green(_status);
+  return _status;
 };
 
 const color = {

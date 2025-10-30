@@ -1,5 +1,5 @@
-import type { Boom } from "@hapi/boom";
-import type { Request } from "@hapi/hapi";
+import type { Boom, Payload } from "@hapi/boom";
+import type { Request, ResponseObject } from "@hapi/hapi";
 
 declare module "@hapi/hapi" {
   interface Request {
@@ -51,6 +51,7 @@ export type String<FormatParams> = {
     : string;
 };
 
+export type Response = ResponseObject["source"] | Payload;
 export type FormatterFn = (params: FormatParams) => string;
 
 /* eslint-disable @typescript-eslint/no-explicit-any */

@@ -1,6 +1,4 @@
-import type { Payload } from "@hapi/boom";
-import type { ResponseObject } from "@hapi/hapi";
-import type { String, FormatParams, TransformFn } from "hlogr/types";
+import type { Response, String, FormatParams, TransformFn } from "hlogr/types";
 
 export const noop = <T>(m: T): T => m;
 
@@ -22,7 +20,19 @@ export const transform: TransformFn = (payload, transforms) => {
   return result as String<FormatParams>;
 };
 
-export const getBytesSent = (response: ResponseObject["source"] | Payload): number => {
+export const widthAlign = (
+  value: number | string,
+  { width, align }: { width: number; align: "left" | "right" | "center" }
+): string => {
+  const str = value.toString();
+  const maxW = Math.max(width - str.length, 0);
+  const end = Math.floor(maxW / 2), start = maxW - end;
+  if (align === "right") return " ".repeat(maxW) + str;
+  if (align === "left") return str + " ".repeat(maxW);
+  return " ".repeat(start) + str + " ".repeat(end);
+};
+
+export const getBytesSent = (response: Response): number => {
   if (typeof response === "string") {
     return Buffer.byteLength(response);
   } else if (Buffer.isBuffer(response)) {

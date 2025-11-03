@@ -28,6 +28,17 @@ const routes: ServerRoute[] = [
     },
   },
   {
+    method: "*",
+    path: "/delay",
+    handler: (request, h) => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(h.response({ message: "Response after delay" }));
+        }, request.query.time || 2000);
+      });
+    },
+  },
+  {
     path: "/404",
     method: "*",
     handler: (_, h) => {

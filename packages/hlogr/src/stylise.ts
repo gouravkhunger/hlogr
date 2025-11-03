@@ -2,7 +2,7 @@ import type { FormatParams } from "hlogr/types";
 import { noop, transform, widthAlign } from "hlogr/utils";
 
 export const stylise = (payload: FormatParams, tabs = false) => {
-  const { colors, error } = payload;
+  const { colors, error, latency } = payload;
   return transform(payload, {
     time: [{ fn: formatTime }],
     status: [{ fn: colorStatus, skip: !colors }],
@@ -13,7 +13,7 @@ export const stylise = (payload: FormatParams, tabs = false) => {
     ],
     latency: [
       { fn: formatLatency, skip: !tabs },
-      { fn: colorLatency, skip: !colors },
+      { fn: colorLatency, skip: !colors, args: [{ latency }] },
     ],
     method: [
       { fn: formatMethod, skip: !tabs },
@@ -34,20 +34,22 @@ const formatTime = (date: Date) =>
 const colorMethod = (method: string): string =>
   (methodColor[method.trim()] ?? noop)(method);
 
-const colorLatency = (latency: number): string => {
-  if (latency > 1000) return color.red(latency);
-  else if (latency > 500) return color.yellow(latency);
-  else if (latency > 200) return color.orange(latency);
-  else return color.green(latency);
+const colorLatency = (
+  _latency: string,
+  { latency }: { latency: number }
+): string => {
+  if (latency > 1000) return color.red(_latency);
+  else if (latency > 500) return color.orange(_latency);
+  else if (latency > 200) return color.yellow(_latency);
+  else return color.green(_latency);
 };
 
 const colorStatus = (status: number): string => {
-  const _status = status.toString();
-  if (status >= 500) return color.red(_status);
-  if (status >= 400) return color.yellow(_status);
-  if (status >= 300) return color.blue(_status);
-  if (status >= 200) return color.green(_status);
-  return _status;
+  if (status >= 500) return color.red(status);
+  if (status >= 400) return color.yellow(status);
+  if (status >= 300) return color.blue(status);
+  if (status >= 200) return color.green(status);
+  return status.toString();
 };
 
 const color = {

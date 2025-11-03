@@ -3,7 +3,7 @@ import type { Response, String, FormatParams, TransformFn } from "hlogr/types";
 export const noop = <T>(m: T): T => m;
 
 export const transform: TransformFn = (payload, transforms) => {
-  const result: Record<string, typeof payload[keyof FormatParams]> = payload;
+  const result: Record<string, FormatParams[keyof FormatParams]> = payload;
   for (const key in transforms) {
     const transform = transforms[key as keyof FormatParams];
     if (!Array.isArray(transform)) continue;

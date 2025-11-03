@@ -40,15 +40,9 @@ export type FormatParams = {
 };
 
 export type String<FormatParams> = {
-  [K in keyof FormatParams]: K extends
-    | "responseHeaders"
-    | "requestHeaders"
-    | "bytesSent"
-    | "query"
-    | "port"
-    | "pid"
-    ? FormatParams[K]
-    : string;
+  [K in keyof FormatParams]: K extends "time" | "status" | "latency"
+    ? string
+    : FormatParams[K];
 };
 
 export type Response = ResponseObject["source"] | Payload;
@@ -58,11 +52,10 @@ export type FormatterFn = (params: FormatParams) => string;
 export type TransformFn = (
   payload: FormatParams,
   transforms: Partial<{
-    [K in keyof FormatParams]:
-      {
-        args?: any[];
-        skip?: boolean;
-        fn: (...args: any[]) => string;
-      }[];
+    [K in keyof FormatParams]: {
+      args?: any[];
+      skip?: boolean;
+      fn: (...args: any[]) => string;
+    }[];
   }>
 ) => String<FormatParams>;

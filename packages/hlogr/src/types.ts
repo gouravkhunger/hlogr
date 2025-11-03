@@ -58,13 +58,11 @@ export type FormatterFn = (params: FormatParams) => string;
 export type TransformFn = (
   payload: FormatParams,
   transforms: Partial<{
-    [K in keyof FormatParams]: [
-      FormatParams[K],
-      ...{
+    [K in keyof FormatParams]:
+      {
         args?: any[];
-        disabled?: boolean;
+        skip?: boolean;
         fn: (...args: any[]) => string;
-      }[],
-    ];
+      }[];
   }>
 ) => String<FormatParams>;

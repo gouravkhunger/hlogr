@@ -2,21 +2,22 @@ import type { FormatParams } from "hlogr/types";
 import { noop, transform, widthAlign } from "hlogr/utils";
 
 export const stylise = (payload: FormatParams, tabs = false) => {
-  const { ip, colors, time, status, method, latency, error } = payload;
+  const { colors, error } = payload;
   return transform(payload, {
-    time: [time, { fn: formatTime }],
-    status: [status, { fn: colorStatus, disabled: !colors }],
-    error: [error || "-", { fn: color.red, disabled: !colors || !error }],
-    ip: [ip, { fn: widthAlign, disabled: !tabs, args: [{ width: 15, align: "left" }] }],
+    time: [{ fn: formatTime }],
+    status: [{ fn: colorStatus, skip: !colors }],
+    ip: [{ fn: widthAlign, skip: !tabs, args: [{ width: 15, align: "left" }] }],
+    error: [
+      { fn: (err) => err || "-" },
+      { fn: color.red, skip: !colors || !error },
+    ],
     latency: [
-      latency,
-      { fn: formatLatency, disabled: !tabs },
-      { fn: colorLatency, disabled: !colors },
+      { fn: formatLatency, skip: !tabs },
+      { fn: colorLatency, skip: !colors },
     ],
     method: [
-      method.toUpperCase(),
-      { fn: formatMethod, disabled: !tabs },
-      { fn: colorMethod, disabled: !colors },
+      { fn: formatMethod, skip: !tabs },
+      { fn: colorMethod, skip: !colors },
     ],
   });
 };
@@ -24,7 +25,7 @@ export const stylise = (payload: FormatParams, tabs = false) => {
 const formatMethod = (method: string): string =>
   widthAlign(method, { width: 7, align: "center" });
 
-const formatLatency = (latency: string): string =>
+const formatLatency = (latency: number): string =>
   widthAlign(latency, { width: 4, align: "right" }) + "ms";
 
 const formatTime = (date: Date) =>

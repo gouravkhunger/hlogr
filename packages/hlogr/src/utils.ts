@@ -3,17 +3,12 @@ import type { Response, String, FormatParams, TransformFn } from "hlogr/types";
 export const noop = <T>(m: T): T => m;
 
 export const transform: TransformFn = (payload, transforms) => {
-  const result: Record<string, typeof payload[keyof FormatParams]> = {};
-  for (const key in payload) {
+  const result: Record<string, typeof payload[keyof FormatParams]> = payload;
+  for (const key in transforms) {
     const transform = transforms[key as keyof FormatParams];
-    if (!Array.isArray(transform) || transform.length < 2) {
-      result[key] = payload[key as keyof FormatParams];
-      continue;
-    }
-    const [initial, ...rest] = transform;
-    result[key] = initial;
-    for (const { fn, args, disabled } of rest) {
-      if (disabled === true) continue;
+    if (!Array.isArray(transform)) continue;
+    for (const { fn, args, skip } of transform) {
+      if (skip === true) continue;
       result[key] = fn(result[key], ...(args || []));
     }
   }

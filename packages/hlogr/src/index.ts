@@ -28,9 +28,16 @@ const register = async (server: Server, options?: PluginOptions) => {
     const { method, path, info, route, query, headers, response, hlogrError } =
       request;
 
+    const status = hlogrError
+      ? hlogrError.output.statusCode
+      : (response as ResponseObject).statusCode;
+
+    if (typeof status === "undefined") return;
+
     const payload = {
       path,
       query,
+      status,
       colors,
       host: info.host,
       time: new Date(),
@@ -47,9 +54,6 @@ const register = async (server: Server, options?: PluginOptions) => {
       latency: info.responded - info.received,
       ip: getIp?.(request) || info.remoteAddress,
       error: hlogrError ? hlogrError.message : undefined,
-      status: hlogrError
-        ? hlogrError.output.statusCode
-        : (response as ResponseObject).statusCode,
       responseHeaders: hlogrError
         ? hlogrError.output.headers
         : (response as ResponseObject).headers,
